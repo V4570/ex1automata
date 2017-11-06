@@ -95,18 +95,18 @@ if __name__ == '__main__':
         if len(_input) > 1:
             for ch in _input:
                 if ch not in automata.alphabet:
-                    print('Charachter ''{}'' not in current automata alphabet, please try again.')
+                    print('Character _{}_ not in current automata alphabet, please try again.'.format(ch))
                     automata.self_reset()
                     continue
                 automata.change_state(ch)
-                print('Current state: {}'.format(automata.current_state.id))
+                print('Current state: _{}_'.format(automata.current_state.id))
         else:
             if _input not in automata.alphabet:
-                print('Charachter ''{}'' not in current automata alphabet, please try again.')
+                print('Character _{}_ not in current automata alphabet, please try again.'.format(_input))
                 automata.self_reset()
                 continue
             automata.change_state(_input)
-            print('Current state: {}'.format(automata.current_state.id))
+            print('Current state: _{}_'.format(automata.current_state.id))
 
     # getch = _Getch()
     # word = ""
