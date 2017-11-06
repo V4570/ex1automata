@@ -55,6 +55,9 @@ class Automata(object):
     def set_alphabet(self, alphabet):
         self.alphabet = alphabet
 
+    def self_reset(self):
+        self.current_state = self.initial_state
+
     def __str__(self):
         return 'States : {}\nInitial State : {}\nEnding States : {}\nAlphabet : {}'.format(
                                                                             [str(s) for s in self.states],
@@ -86,14 +89,33 @@ if __name__ == '__main__':
     automata = generate_automata(infile)
 
     # print(automata)
-    getch = _Getch()
-    word = ""
+
     while True:
-        # y = input('Input a character or a string--> ')
-        x = bytes.decode(getch())
-        if x == '\r':
-            print('ENTER')
-            continue
-        elif x == '\x1b':
-            sys.exit()
-        print(x)
+        _input = input('Input character or string --> ')
+        if len(_input) > 1:
+            for ch in _input:
+                if ch not in automata.alphabet:
+                    print('Charachter ''{}'' not in current automata alphabet, please try again.')
+                    automata.self_reset()
+                    continue
+                automata.change_state(ch)
+                print('Current state: {}'.format(automata.current_state.id))
+        else:
+            if _input not in automata.alphabet:
+                print('Charachter ''{}'' not in current automata alphabet, please try again.')
+                automata.self_reset()
+                continue
+            automata.change_state(_input)
+            print('Current state: {}'.format(automata.current_state.id))
+
+    # getch = _Getch()
+    # word = ""
+    # while True:
+    #     # y = input('Input a character or a string--> ')
+    #     x = bytes.decode(getch())
+    #     if x == '\r':
+    #         print('ENTER')
+    #         continue
+    #     elif x == '\x1b':
+    #         sys.exit()
+    #     print(x)
