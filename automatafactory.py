@@ -202,7 +202,7 @@ if __name__ == '__main__':
         print('\n Current automata alphabet is : {}'.format(automata.alphabet))
 
         while True:
-            choice = input('\n [Selection]> ')
+            choice = str(input('\n [Selection]> '))
             try:
                 if choice == '99':
                     options[choice]()
