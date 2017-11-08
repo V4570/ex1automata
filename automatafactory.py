@@ -112,7 +112,7 @@ def char_by_char(automata):
 
     while True:
 
-        print(' [0]> ')
+        print(' (Enter a char) ')
 
         x = bytes.decode(getch())
 
@@ -138,12 +138,12 @@ def char_by_char(automata):
 
         automata.change_state(x)
         if any((int(s.id) in automata.ending_states) for s in automata.current_states):
-            print(' {}'.format(x))
+            print('    {}'.format(x))
             print('\n You are in an end state!'
                   '\n Automata does not reset until you press return (ENTER) key.'
                   '\n Continue with another character or press ESC to exit.')
         else:
-            print(' {}'.format(x))
+            print('    {}'.format(x))
             print('\n You are not in an end state!'
                   '\n Automata does not reset until you press return (ENTER) key.'
                   '\n Continue with another character or press ESC to exit.')
