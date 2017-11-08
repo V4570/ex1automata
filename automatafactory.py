@@ -1,6 +1,5 @@
 import argparse
 from getch import _Getch
-import sys
 from menu import *
 
 
@@ -59,18 +58,17 @@ class Automata(object):
         self.current_states.clear()
 
         for ts in temp_states:
+
             try:
                 next_states = ts.next_states(char)
             except KeyError:
                 continue
+
             for ns in next_states:
                 self.current_states.append(self.states[ns - 1])
 
         for s in self.current_states:
             print(s)
-
-        # for s in self.current_states:
-        #     print(s)
 
     def set_alphabet(self, alphabet):
         self.alphabet = alphabet
