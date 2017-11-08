@@ -118,11 +118,13 @@ def char_by_char(automata):
 
         if x == '\r':
             if any((int(s.id) in automata.ending_states) for s in automata.current_states):
-                print('\n You are in an end state!\n Continue with another string or press Ctr-C to exit.')
+                print('\n You are in an end state!\n Continue with another string or press ESC to exit.')
             else:
-                print('\n You are not in an end state!\n Continue with another string or press Ctr-C to exit.')
+                print('\n You are not in an end state!\n Continue with another string or press ESC to exit.')
             automata.self_reset()
             continue
+        elif x == '\x1b':
+            sys.exit()
 
         if x not in automata.alphabet:
             print('\r{}'.format(x))
