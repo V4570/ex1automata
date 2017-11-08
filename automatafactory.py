@@ -118,9 +118,13 @@ def char_by_char(automata):
 
         if x == '\r':
             if any((int(s.id) in automata.ending_states) for s in automata.current_states):
-                print('\n You are in an end state!\n Continue with another string or press ESC to exit.')
+                print('\n You are in an end state!'
+                      '\n Automata resets now!'
+                      '\n Continue with another string or press ESC to exit.')
             else:
-                print('\n You are not in an end state!\n Continue with another string or press ESC to exit.')
+                print('\n You are not in an end state!'
+                      '\n Automata resets now!'
+                      '\n Continue with another string or press ESC to exit.')
             automata.self_reset()
             continue
         elif x == '\x1b':
@@ -134,10 +138,14 @@ def char_by_char(automata):
 
         automata.change_state(x)
         if any((int(s.id) in automata.ending_states) for s in automata.current_states):
-            print('\n You are in an end state! Automata does not reset until you press return (ENTER) key.'
+            print(' {}'.format(x))
+            print('\n You are in an end state!'
+                  '\n Automata does not reset until you press return (ENTER) key.'
                   '\n Continue with another character or press ESC to exit.')
         else:
-            print('\n You are not in an end state! Automata does not reset until you press return (ENTER) key.'
+            print(' {}'.format(x))
+            print('\n You are not in an end state!'
+                  '\n Automata does not reset until you press return (ENTER) key.'
                   '\n Continue with another character or press ESC to exit.')
 
 
