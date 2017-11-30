@@ -172,7 +172,7 @@ def input_string(automata):
                 continue
             automata.change_state(_input)
 
-        if any((int(s.id) in automata.ending_states) for s in automata.current_states):
+        if any((str(s.id) in automata.ending_states) for s in automata.current_states):
             print('\n You are in an end state!\n Continue with another string or press Ctr-C to exit.')
         else:
             print('\n You are not in an end state!\n Continue with another string or press Ctr-C to exit.')
@@ -196,7 +196,7 @@ if __name__ == '__main__':
     infile = parser.parse_args().input
 
     automata = generate_automata(infile)
-
+    print(automata)
     try:
         start_menu()
         print('\n Current automata alphabet is : {}'.format(automata.alphabet))
