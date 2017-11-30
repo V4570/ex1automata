@@ -114,7 +114,10 @@ def char_by_char(automata):
 
         print(' (Enter a char) ')
 
-        x = bytes.decode(getch())
+        try:
+            x = bytes.decode(getch())
+        except TypeError:
+            x = getch()
 
         if x == '\r':
             if any((int(s.id) in automata.ending_states) for s in automata.current_states):
