@@ -3,6 +3,22 @@ from getch import _Getch
 from menu import *
 import sys
 
+'''
+    Method that reads a file that describes a given automata.
+    File format example:
+        3   #Number of states in the automata
+        1   #Id of the first state
+        2   #Number of final states
+        2 3 #Id of the final states
+        6   #Number of max transitions
+        1 a 2   # Possible transitions.
+        1 b 1
+        2 a 3
+        2 b 1
+        3 a 3
+        3 b 1
+'''
+
 
 def generate_automata(_infile):
 
@@ -17,12 +33,11 @@ def generate_automata(_infile):
         ending_states = [int(num) for num in fin.readline().split()]
         transitions = int(fin.readline())
 
+        # For each id that was read we create a State object
         for i in range(s):
             states.append(State(i + 1))
 
-        initial_state = states[initial_state_id - 1]
-
-        auto = Automata(states, initial_state, num_ending_states, ending_states)
+        auto = Automata(states, initial_state_id, num_ending_states, ending_states)
 
         for _ in range(transitions):
 
@@ -30,7 +45,7 @@ def generate_automata(_infile):
             state_id = int(state_id)
             next_state = int(next_state)
 
-            if char not in alphabet:
+            if char not in alphabet and char != '@':
                 alphabet.append(char)
 
             auto.states[state_id - 1].set_connection(char, next_state)
@@ -41,14 +56,30 @@ def generate_automata(_infile):
 
 
 class Automata(object):
-    def __init__(self, states, initial_state, num_ending_states, ending_states):
+    def __init__(self, states, initial_state_id, num_ending_states, ending_states):
         self.states = states
-        self.initial_state = initial_state
+        self.initial_state = self.states[initial_state_id - 1]
         self.num_ending_states = num_ending_states
         self.ending_states = ending_states
         self.alphabet = []
         self.current_states = []
         self.current_states.append(self.initial_state)
+
+    def add_epsilon_states(self):
+        previous_len = len(self.current_states)
+        for st in self.current_states:
+            try:
+                next_states = st.next_states('@')
+            except KeyError:
+                continue
+
+            for ns in next_states:
+                next_s = self.states[ns - 1]
+                if next_s not in self.current_states:
+                    self.current_states.append(next_s)
+
+        if previous_len > len(self.current_states):
+            self.add_epsilon_states()
 
     def change_state(self, char):
 
@@ -69,12 +100,15 @@ class Automata(object):
             for ns in next_states:
                 self.current_states.append(self.states[ns - 1])
 
+        self.add_epsilon_states()
+
     def set_alphabet(self, alphabet):
         self.alphabet = alphabet
 
     def self_reset(self):
         self.current_states.clear()
         self.current_states.append(self.initial_state)
+        self.add_epsilon_states()
 
     def __str__(self):
         return 'States : {}\nInitial State : {}\nEnding States : {}\nAlphabet : {}'.format(
@@ -140,7 +174,7 @@ def char_by_char(automata):
             continue
 
         automata.change_state(x)
-        if any((int(s.id) in automata.ending_states) for s in automata.current_states):
+        if any((s.id in automata.ending_states) for s in automata.current_states):
             print('    {}'.format(x))
             print('\n You are in an end state!'
                   '\n Automata does not reset until you press return (ENTER) key.'
@@ -175,7 +209,7 @@ def input_string(automata):
                 continue
             automata.change_state(_input)
 
-        if any((str(s.id) in automata.ending_states) for s in automata.current_states):
+        if any((s.id in automata.ending_states) for s in automata.current_states):
             print('\n You are in an end state!\n Continue with another string or press Ctr-C to exit.')
         else:
             print('\n You are not in an end state!\n Continue with another string or press Ctr-C to exit.')
@@ -199,7 +233,8 @@ if __name__ == '__main__':
     infile = parser.parse_args().input
 
     automata = generate_automata(infile)
-    print(automata)
+    automata.add_epsilon_states()
+
     try:
         start_menu()
         print('\n Current automata alphabet is : {}'.format(automata.alphabet))
