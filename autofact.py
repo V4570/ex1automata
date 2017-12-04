@@ -1,3 +1,18 @@
+#!/usr/bin/env python
+# -.- coding: utf-8 -.-
+# autofact.py
+
+"""
+ ________  ___  ___  _________  ________  ________ ________  ________ _________
+|\   __  \|\  \|\  \|\___   ___\\   __  \|\  _____\\   __  \|\   ____\\___   ___\
+\ \  \|\  \ \  \\\  \|___ \  \_\ \  \|\  \ \  \__/\ \  \|\  \ \  \___\|___ \  \_|
+ \ \   __  \ \  \\\  \   \ \  \ \ \  \\\  \ \   __\\ \   __  \ \  \       \ \  \
+  \ \  \ \  \ \  \\\  \   \ \  \ \ \  \\\  \ \  \_| \ \  \ \  \ \  \____   \ \  \
+   \ \__\ \__\ \_______\   \ \__\ \ \_______\ \__\   \ \__\ \__\ \_______\  \ \__\
+    \|__|\|__|\|_______|    \|__|  \|_______|\|__|    \|__|\|__|\|_______|   \|__|
+
+"""
+
 import argparse
 from getch import _Getch
 from menu import *
@@ -21,7 +36,6 @@ import sys
 
 
 def generate_automata(_infile):
-
     with open(infile, 'r') as fin:
 
         alphabet = []
@@ -112,10 +126,10 @@ class Automata(object):
 
     def __str__(self):
         return 'States : {}\nInitial State : {}\nEnding States : {}\nAlphabet : {}'.format(
-                                                                            [str(s) for s in self.states],
-                                                                            self.initial_state,
-                                                                            [es for es in self.ending_states],
-                                                                            [str(l) for l in self.alphabet])
+            [str(s) for s in self.states],
+            self.initial_state,
+            [es for es in self.ending_states],
+            [str(l) for l in self.alphabet])
 
 
 class State(object):
@@ -138,15 +152,15 @@ class State(object):
 
 
 def char_by_char(automata):
-
     getch = _Getch()
 
-    print('\n In this option you input a character and the program will automatically\n'
-          ' change state and when you press the return key print if you are in an end state or not.\n')
+    sys.stdout.write('\n In this option you input a character and the program will automatically\n'
+                     'change state and when you press the return key sys.stdout.write if you are in an end state or '
+                     'not.\n')
 
     while True:
 
-        print(' (Enter a char) ')
+        sys.stdout.write('\n (Enter a char) ')
 
         try:
             x = bytes.decode(getch())
@@ -155,41 +169,40 @@ def char_by_char(automata):
 
         if x == '\r':
             if any((int(s.id) in automata.ending_states) for s in automata.current_states):
-                print('\n You are in an end state!'
-                      '\n Automata resets now!'
-                      '\n Continue with another string or press ESC to exit.')
+                sys.stdout.write('\n You are in an end state!'
+                                 '\n Automata resets now!'
+                                 '\n Continue with another string or press ESC to exit.')
             else:
-                print('\n You are not in an end state!'
-                      '\n Automata resets now!'
-                      '\n Continue with another string or press ESC to exit.')
+                sys.stdout.write('\n You are not in an end state!'
+                                 '\n Automata resets now!'
+                                 '\n Continue with another string or press ESC to exit.')
             automata.self_reset()
             continue
         elif x == '\x1b':
             sys.exit()
 
         if x not in automata.alphabet:
-            print('\r{}'.format(x))
-            print(' Character {} not in current automata alphabet, please try again.'.format(x))
+            sys.stdout.write('\r{}\n'.format(x))
+            sys.stdout.write(' Character {} not in current automata alphabet, please try again.\n'.format(x))
             automata.self_reset()
             continue
 
         automata.change_state(x)
         if any((s.id in automata.ending_states) for s in automata.current_states):
-            print('    {}'.format(x))
-            print('\n You are in an end state!'
-                  '\n Automata does not reset until you press return (ENTER) key.'
-                  '\n Continue with another character or press ESC to exit.')
+            sys.stdout.write('    {}'.format(x))
+            sys.stdout.write('\n You are in an end state!'
+                             '\n Automata does not reset until you press return (ENTER) key.'
+                             '\n Continue with another character or press ESC to exit.')
         else:
-            print('    {}'.format(x))
-            print('\n You are not in an end state!'
-                  '\n Automata does not reset until you press return (ENTER) key.'
-                  '\n Continue with another character or press ESC to exit.')
+            sys.stdout.write('    {}'.format(x))
+            sys.stdout.write('\n You are not in an end state!'
+                             '\n Automata does not reset until you press return (ENTER) key.'
+                             '\n Continue with another character or press ESC to exit.')
 
 
 def input_string(automata):
-
-    print('\n In this option you can input a string of characters (or even a single character)\n'
-          ' and press the return key to see if you are in an end state or not.\n')
+    sys.stdout.write('\n In this option you can input a string of characters (or even a single character)\n'
+                     ' and press the return key to see if you are in an end state or not.\n')
 
     while True:
 
@@ -198,32 +211,31 @@ def input_string(automata):
         if len(_input) > 1:
             for ch in _input:
                 if ch not in automata.alphabet:
-                    print(' Character {} not in current automata alphabet, please try again.'.format(ch))
+                    sys.stdout.write(' Character {} not in current automata alphabet, please try again.\n'.format(ch))
                     automata.self_reset()
                     continue
                 automata.change_state(ch)
         else:
             if _input not in automata.alphabet:
-                print(' Character {} not in current automata alphabet, please try again.'.format(_input))
+                sys.stdout.write(' Character {} not in current automata alphabet, please try again.\n'.format(_input))
                 automata.self_reset()
                 continue
             automata.change_state(_input)
 
         if any((s.id in automata.ending_states) for s in automata.current_states):
-            print('\n You are in an end state!\n Continue with another string or press Ctr-C to exit.')
+            sys.stdout.write('\n You are in an end state!\n Continue with another string or press Ctr-C to exit.\n')
         else:
-            print('\n You are not in an end state!\n Continue with another string or press Ctr-C to exit.')
+            sys.stdout.write('\n You are not in an end state!\n Continue with another string or press Ctr-C to exit.\n')
         automata.self_reset()
 
 
 def start_menu():
-
-    print(main_text)
+    sys.stdout.write(main_text)
 
     for i in range(len(main_menu)):
-        print(' {} - {}'.format(i, main_menu[i]))
+        sys.stdout.write(' {} - {}'.format(i, main_menu[i]))
 
-    print(' 99 - To exit the program')
+    sys.stdout.write(' 99 - To exit the program')
 
 
 if __name__ == '__main__':
@@ -237,7 +249,7 @@ if __name__ == '__main__':
 
     try:
         start_menu()
-        print('\n Current automata alphabet is : {}'.format(automata.alphabet))
+        sys.stdout.write('\n Current automata alphabet is : {}'.format(automata.alphabet))
 
         while True:
             choice = str(input('\n [Selection]> '))
@@ -247,7 +259,7 @@ if __name__ == '__main__':
                 else:
                     options[choice](automata)
             except KeyError:
-                print(' Wrong selection! Use one of the numbers provided.')
+                sys.stdout.write(' Wrong selection! Use one of the numbers provided.')
                 continue
     except KeyboardInterrupt:
         sys.exit()
