@@ -25,6 +25,28 @@ import sys
 '''
 
 
+def start_menu():
+    BLUE = '\33[94m'
+
+    sys.stdout.write(BLUE + """
+  ___        _       ______         _   
+ / _ \      | |      |  ___|       | |  
+/ /_\ \_   _| |_ ___ | |_ __ _  ___| |_ 
+|  _  | | | | __/ _ \|  _/ _` |/ __| __|
+| | | | |_| | || (_) | || (_| | (__| |_ 
+\_| |_/\__,_|\__\___/\_| \__,_|\___|\__|
+                                    v0.1
+"""
+)
+    sys.stdout.flush()
+    sys.stdout.write(main_text)
+
+    for i in range(len(main_menu)):
+        sys.stdout.write(' {} - {}'.format(i, main_menu[i]))
+
+    sys.stdout.write(' 99 - To exit the program')
+
+
 def generate_automata(_infile):
     with open(infile, 'r') as fin:
 
@@ -217,15 +239,6 @@ def input_string(automata):
         else:
             sys.stdout.write('\n You are not in an end state!\n Continue with another string or press Ctr-C to exit.\n')
         automata.self_reset()
-
-
-def start_menu():
-    sys.stdout.write(main_text)
-
-    for i in range(len(main_menu)):
-        sys.stdout.write(' {} - {}'.format(i, main_menu[i]))
-
-    sys.stdout.write(' 99 - To exit the program')
 
 
 if __name__ == '__main__':
