@@ -6,6 +6,7 @@
 import argparse
 from getch import _Getch
 from menu import *
+from builtins import input
 import sys
 
 '''
@@ -114,7 +115,7 @@ class Automata(object):
         for s in self.current_states:
             temp_states.append(s)
 
-        self.current_states.clear()
+        del self.current_states[:]
 
         for ts in temp_states:
 
@@ -132,7 +133,7 @@ class Automata(object):
         self.alphabet = alphabet
 
     def self_reset(self):
-        self.current_states.clear()
+        del self.current_states[:]
         self.current_states.append(self.initial_state)
         self.add_epsilon_states()
 
@@ -218,7 +219,7 @@ def input_string(automata):
 
     while True:
 
-        _input = input(' [1] > ')
+        _input = str(input(' [1] > '))
 
         if len(_input) > 1:
             for ch in _input:
