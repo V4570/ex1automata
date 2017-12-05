@@ -26,7 +26,7 @@ import os
         3 b 1
 '''
 
-
+# Displays the menu
 def start_menu():
     if os.name == 'posix':
         BLUE = '\33[94m'
@@ -51,7 +51,7 @@ def start_menu():
 
     sys.stdout.write(' 99 - To exit the program')
 
-
+# Reads the file, stores the values and initializes the automata
 def generate_automata(_infile):
     with open(infile, 'r') as fin:
 
@@ -70,6 +70,7 @@ def generate_automata(_infile):
 
         auto = Automata(states, initial_state_id, num_ending_states, ending_states)
 
+        # Reads the transitions and adds the to each state's connections list
         for _ in range(transitions):
 
             state_id, char, next_state = fin.readline().split()
@@ -85,7 +86,7 @@ def generate_automata(_infile):
 
     return auto
 
-
+# The automata class contains all the information about the current automata
 class Automata(object):
     def __init__(self, states, initial_state_id, num_ending_states, ending_states):
         self.states = states
@@ -96,6 +97,7 @@ class Automata(object):
         self.current_states = []
         self.current_states.append(self.initial_state)
 
+    # Adds the any ε-transitions in the current states. It continues checking while the list gets bigger.
     def add_epsilon_states(self):
         previous_len = len(self.current_states)
         for st in self.current_states:
@@ -167,7 +169,7 @@ class State(object):
     def __str__(self):
         return 'Id:{} - Connections:{}'.format(self.id, self.connections)
 
-
+# Using the Getch() module this method reads the character from the shell without having to press return (ENTER) key.
 def char_by_char(automata):
     getch = _Getch()
 
@@ -216,7 +218,7 @@ def char_by_char(automata):
                              '\n Automata does not reset until you press return (ENTER) key.'
                              '\n Continue with another character or press ESC to exit.')
 
-
+# Reads the input string, changes states and then resets the automata.
 def input_string(automata):
     sys.stdout.write('\n In this option you can input a string of characters (or even a single character)\n'
                      ' and press the return key to see if you are in an end state or not.\n')
