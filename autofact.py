@@ -8,6 +8,7 @@ from getch import _Getch
 from menu import *
 from builtins import input
 import sys
+import os
 
 '''
     Method that reads a file that describes a given automata.
@@ -27,7 +28,10 @@ import sys
 
 
 def start_menu():
-    BLUE = '\33[94m'
+    if os.name == 'posix':
+        BLUE = '\33[94m'
+    else:
+        BLUE = ''
 
     sys.stdout.write(BLUE + """
   ___        _       ______         _   
