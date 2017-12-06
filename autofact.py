@@ -56,7 +56,6 @@ def generate_automata(_infile):
     with open(infile, 'r') as fin:
 
         alphabet = []
-        states = []
 
         s = int(fin.readline())
         initial_state_id = int(fin.readline())
@@ -65,8 +64,7 @@ def generate_automata(_infile):
         transitions = int(fin.readline())
 
         # For each id that was read we create a State object
-        for i in range(s):
-            states.append(State(i + 1))
+        states = [State(i + 1) for i in range(s)]
 
         auto = Automata(states, initial_state_id, num_ending_states, ending_states)
 
