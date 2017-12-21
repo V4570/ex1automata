@@ -13,17 +13,21 @@ import os
 '''
     Method that reads a file that describes a given automata.
     File format example:
-        3   #Number of states in the automata
+        5   #Number of states in the automata
         1   #Id of the first state
         2   #Number of final states
         2 3 #Id of the final states
-        6   #Number of max transitions
-        1 a 2   # Possible transitions.
-        1 b 1
-        2 a 3
-        2 b 1
-        3 a 3
-        3 b 1
+        10  #Number of max transitions
+        1 @ 2   # Possible transitions.
+        1 @ 3
+        2 0 4
+        2 1 2
+        3 1 5
+        3 0 3
+        4 0 2
+        4 1 4
+        5 1 3
+        5 0 5
 '''
 
 # Displays the menu
@@ -68,7 +72,7 @@ def generate_automata(_infile):
 
         auto = Automata(states, initial_state_id, num_ending_states, ending_states)
 
-        # Reads the transitions and adds the to each state's connections list
+        # Reads the transitions and adds them to each state's connections list
         for _ in range(transitions):
 
             state_id, char, next_state = fin.readline().split()
@@ -95,7 +99,7 @@ class Automata(object):
         self.current_states = []
         self.current_states.append(self.initial_state)
 
-    # Adds the any ε-transitions in the current states. It continues checking while the list gets bigger.
+    # Adds any ε-transitions in the current states. It continues checking while the list gets bigger.
     def add_epsilon_states(self):
         previous_len = len(self.current_states)
         for st in self.current_states:
@@ -114,10 +118,7 @@ class Automata(object):
 
     def change_state(self, char):
 
-        temp_states = []
-
-        for s in self.current_states:
-            temp_states.append(s)
+        temp_states = list(self.current_states)
 
         del self.current_states[:]
 
