@@ -173,7 +173,7 @@ def char_by_char(automata):
     getch = _Getch()
 
     sys.stdout.write('\n In this option you input a character and the program will automatically\n'
-                     'change state and when you press the return key sys.stdout.write if you are in an end state or '
+                     ' change state and when you press the return key sys.stdout.write if you are in an end state or '
                      'not.\n')
 
     while True:
